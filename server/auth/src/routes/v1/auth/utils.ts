@@ -1,4 +1,4 @@
-import { dayjs } from '@/util/dayjs.js'
+import { dayjs } from '@/util/dayjs'
 import { sign } from 'hono/jwt'
 import { nanoid } from 'nanoid'
 

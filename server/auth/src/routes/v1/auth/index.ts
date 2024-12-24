@@ -1,18 +1,11 @@
-import type { AppEnvVariables } from '@/schema/env.js'
+import { login } from '@/routes/v1/auth/handlers/login'
+import { logout } from '@/routes/v1/auth/handlers/logout'
+import { profile } from '@/routes/v1/auth/handlers/profile'
+import { refresh } from '@/routes/v1/auth/handlers/refresh'
+import { signup } from '@/routes/v1/auth/handlers/signup'
+import { factory } from '@/factory'
 
-import { Hono } from 'hono'
-import { type JwtVariables } from 'hono/jwt'
-
-import { login } from './handlers/login.js'
-import { logout } from './handlers/logout.js'
-import { profile } from './handlers/profile.js'
-import { refresh } from './handlers/refresh.js'
-import { signup } from './handlers/signup.js'
-
-export const app = new Hono<{
-  Bindings: AppEnvVariables
-  Variables: JwtVariables
-}>()
+export const app = factory.createApp()
 
 app.post('/login', ...login)
 app.post('/signup', ...signup)

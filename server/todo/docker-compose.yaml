@@ -1,6 +1,6 @@
 services:
   database:
-    container_name: auth_database
+    container_name: api-server-todo.flycast
     image: postgres:15.10
     volumes:
       - ~/todo/data:/data/db
@@ -12,10 +12,10 @@ services:
       - POSTGRES_DB=${DB_NAME}
 
   api:
-    container_name: auth_api
+    container_name: todo_api
     build:
       context: ../../
-      dockerfile: ./server/auth/Dockerfile
+      dockerfile: ./server/todo/Dockerfile
     ports:
       - 3001:3001
     depends_on:

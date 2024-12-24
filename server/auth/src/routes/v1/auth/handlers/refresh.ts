@@ -1,17 +1,16 @@
-import { db } from '@/db/index.js'
-import { users } from '@/db/schema.js'
-import { factory } from '@/factory.js'
-import { jwtMiddleware } from '@/middlewares/jwt.js'
+import { db } from '@/db'
+import { users } from '@/db/schema'
+import { factory } from '@/factory'
+import { jwtMiddleware } from '@/middlewares/jwt'
 import { z } from '@hono/zod-openapi'
-import * as argon2 from 'argon2'
 import { eq, sql } from 'drizzle-orm'
 import { describeRoute } from 'hono-openapi'
 import { resolver, validator } from 'hono-openapi/zod'
 import { env } from 'hono/adapter'
 import { HTTPException } from 'hono/http-exception'
 import { decode } from 'hono/jwt'
-
-import { getToken } from '../utils.js'
+import { getToken } from '@/routes/v1/auth/utils'
+import { compare, hash } from 'bcryptjs'
 
 const refreshDto = z.object({
   accessToken: z.string().min(1),
@@ -43,10 +42,7 @@ export const refresh = factory.createHandlers(
       throw new HTTPException(403)
     }
 
-    const refreshTokenMatches = await argon2.verify(
-      user.refreshToken,
-      refreshToken,
-    )
+    const refreshTokenMatches = await compare(user.refreshToken, refreshToken)
 
     if (!refreshTokenMatches) {
       throw new HTTPException(403)
@@ -56,7 +52,7 @@ export const refresh = factory.createHandlers(
 
     await db
       .update(users)
-      .set({ refreshToken: await argon2.hash(token.refreshToken) })
+      .set({ refreshToken: await hash(token.refreshToken, 8) })
       .where(eq(users.id, user.id))
 
     return c.json(token)

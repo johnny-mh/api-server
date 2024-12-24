@@ -1,4 +1,4 @@
-import { type AppEnvVariables, envSchema } from '@/schema/env'
+import { type AppEnvVariables, envSchema } from 'auth'
 import { createFactory } from 'hono/factory'
 
 export const envVariables = envSchema.parse(process.env)

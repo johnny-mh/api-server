@@ -1,15 +1,13 @@
-import { db } from '@/db/index.js'
-import { users } from '@/db/schema.js'
-import { factory } from '@/factory.js'
+import { db } from '@/db'
+import { users } from '@/db/schema'
+import { factory } from '@/factory'
+import { compare, hash } from 'bcryptjs'
 import { z } from '@hono/zod-openapi'
-import * as argon2 from 'argon2'
 import { eq, sql } from 'drizzle-orm'
 import { describeRoute } from 'hono-openapi'
 import { resolver, validator } from 'hono-openapi/zod'
-import { env } from 'hono/adapter'
 import { HTTPException } from 'hono/http-exception'
-
-import { getToken } from '../utils.js'
+import { getToken } from '@/routes/v1/auth/utils'
 
 const loginDto = z.object({
   email: z.string(),
@@ -35,17 +33,19 @@ export const login = factory.createHandlers(
       throw new HTTPException(401, { message: 'Unauthorized' })
     }
 
-    const passwordMatches = await argon2.verify(user.password, password)
+    const passwordMatches = await compare(password, user.password)
 
     if (!passwordMatches) {
       throw new HTTPException(401, { message: 'Unauthorized' })
     }
 
-    const token = await getToken({ env: env(c), user })
+    const token = await getToken({ env: c.var, user })
 
     await db
       .update(users)
-      .set({ refreshToken: await argon2.hash(token.refreshToken) })
+      .set({
+        refreshToken: await hash(token.refreshToken, 8),
+      })
       .where(eq(users.id, user.id))
 
     return c.json(token)

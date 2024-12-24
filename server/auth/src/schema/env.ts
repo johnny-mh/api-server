@@ -6,6 +6,7 @@ export const envSchema = z.object({
   REFRESH_TOKEN_SECRET: z.string(),
   TOKEN_DURATION: z.string(),
   TOKEN_SECRET: z.string(),
+  SERVER_PORT: z.string(),
 })
 
 export type AppEnvVariables = z.infer<typeof envSchema>
