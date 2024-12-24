@@ -1,0 +1,32 @@
+services:
+  database:
+    container_name: auth_server_database
+    image: postgres:15.10
+    volumes:
+      - ~/auth_server/data:/data/db
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+
+  api:
+    container_name: auth_server_api
+    build:
+      context: .
+      dockerfile: ./apps/server/Dockerfile
+      args:
+        - TURBO_TOKEN=${TURBO_TOKEN}
+        - TURBO_TEAM=${TURBO_TEAM}
+    user: nodejs
+    volumes:
+      - ~/auth_server/files:/app/apps/server/dist/static
+    ports:
+      - 3001:3001
+    depends_on:
+      - database
+    environment:
+      - DB_URL=${DB_URL}
+      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
