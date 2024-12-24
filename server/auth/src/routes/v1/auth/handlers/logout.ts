@@ -20,10 +20,7 @@ export const logout = factory.createHandlers(
   async (c) => {
     const { sub } = c.get('jwtPayload')
 
-    await db
-      .update(users)
-      .set({ refreshToken: null })
-      .where(sql`${sub} = id`)
+    await db.update(users).set({ refreshToken: null }).where(sql`${sub} = id`)
 
     return c.text('OK')
   },

@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src"
+    "dev": "bun run --hot src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -28,15 +28,12 @@
     "zod-openapi": "^4.1.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.6.0",
+    "@biomejs/biome": "1.9.4",
     "@types/node": "^20.10.4",
     "@types/pg": "^8.11.10",
     "drizzle-kit": "^0.30.1",
-    "eslint": "^9.17.0",
-    "eslint-plugin-perfectionist": "^4.3.0",
     "globals": "^15.13.0",
     "prettier": "3.4.2",
-    "tsx": "^4.19.2",
-    "typescript-eslint": "^7.16.0"
+    "tsx": "^4.19.2"
   }
 }

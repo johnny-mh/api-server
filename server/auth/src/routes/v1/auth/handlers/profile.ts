@@ -13,11 +13,7 @@ export const profile = factory.createHandlers(
   describeRoute({
     responses: {
       200: {
-        content: {
-          'application/json': {
-            schema: resolver(profileSchema),
-          },
-        },
+        content: { 'application/json': { schema: resolver(profileSchema) } },
         description: 'Succeed',
       },
     },

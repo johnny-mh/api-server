@@ -20,11 +20,7 @@ export const login = factory.createHandlers(
   describeRoute({
     responses: {
       200: {
-        content: {
-          'application/json': {
-            schema: resolver(loginDto),
-          },
-        },
+        content: { 'application/json': { schema: resolver(loginDto) } },
         description: 'Succeed',
       },
     },
@@ -33,10 +29,7 @@ export const login = factory.createHandlers(
   async (c) => {
     const { email, password } = c.req.valid('json')
 
-    const [user] = await db
-      .select()
-      .from(users)
-      .where(sql`${email} = email`)
+    const [user] = await db.select().from(users).where(sql`${email} = email`)
 
     if (!user) {
       throw new HTTPException(401, { message: 'Unauthorized' })

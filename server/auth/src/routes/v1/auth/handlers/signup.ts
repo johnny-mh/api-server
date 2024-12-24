@@ -27,11 +27,7 @@ export const signup = factory.createHandlers(
   describeRoute({
     responses: {
       200: {
-        content: {
-          'application/json': {
-            schema: resolver(tokenSchema),
-          },
-        },
+        content: { 'application/json': { schema: resolver(tokenSchema) } },
         description: 'Succeed',
       },
     },

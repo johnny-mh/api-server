@@ -22,11 +22,7 @@ export const refresh = factory.createHandlers(
   describeRoute({
     responses: {
       200: {
-        content: {
-          'application/json': {
-            schema: resolver(refreshDto),
-          },
-        },
+        content: { 'application/json': { schema: resolver(refreshDto) } },
         description: 'Succeed',
       },
     },
