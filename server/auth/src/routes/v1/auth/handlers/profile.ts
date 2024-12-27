@@ -1,5 +1,5 @@
-import { factory } from '@/factory.js'
-import { jwtMiddleware } from '@/middlewares/jwt.js'
+import { factory } from '@/factory'
+import { jwtMiddleware } from '@/middlewares/jwt'
 import { z } from '@hono/zod-openapi'
 import { describeRoute } from 'hono-openapi'
 import { resolver } from 'hono-openapi/zod'

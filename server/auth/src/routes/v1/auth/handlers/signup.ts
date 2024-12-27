@@ -1,13 +1,12 @@
-import { db } from '@/db/index.js'
-import { users } from '@/db/schema.js'
-import { factory } from '@/factory.js'
+import { db } from '@/db'
+import { users } from '@/db/schema'
+import { factory } from '@/factory'
 import { z } from '@hono/zod-openapi'
-import * as argon2 from 'argon2'
+import { hash } from 'bcryptjs'
 import { sql } from 'drizzle-orm'
 import { describeRoute } from 'hono-openapi'
 import { resolver, validator } from 'hono-openapi/zod'
 import { HTTPException } from 'hono/http-exception'
-import { nanoid } from 'nanoid'
 
 const tokenSchema = z.object({
   accessToken: z.string(),
@@ -47,8 +46,8 @@ export const signup = factory.createHandlers(
 
     await db.insert(users).values({
       ...body,
-      password: await argon2.hash(body.password),
-      refreshToken: nanoid(),
+      password: await hash(body.password, 8),
+      refreshToken: null,
       role: 'user',
     })
 
